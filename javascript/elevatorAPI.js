@@ -6,6 +6,40 @@ var ElevatorAPI = function(options) {
 	this.options = options;
 
 
+   var ajaxReqs = 0;
+   var ajaxQueue = [];
+   var ajaxActive = 0;
+   var ajaxMaxConc = 3;
+   
+   
+   this.addAjax = function(obj) {
+      ajaxReqs++;
+      var oldSuccess = obj.success;
+      var oldError = obj.error;
+      var callback = function() {
+         ajaxReqs--;
+         if (ajaxActive === ajaxMaxConc) {
+               $.ajax(ajaxQueue.shift());
+         } else {
+               ajaxActive--;
+         }
+      }
+      obj.success = function(resp, xhr, status) {
+         callback();
+         if (oldSuccess) oldSuccess(resp, xhr, status);
+      };
+      obj.error = function(xhr, status, error) {
+         callback();
+         if (oldError) oldError(xhr, status, error);
+      };
+      if (ajaxActive === ajaxMaxConc) {
+         ajaxQueue.push(obj);
+      } else {
+         ajaxActive++;
+         $.ajax(obj);
+      }
+   }
+
    // List all of the assets in a collection.  Returns a basic (search response-style) entry. 
    // limited to 30 assets per "page", pagenumber is 0 indexed
    this.getAssetsFromCollection = function(collectionId, pageNumber, callback) {
@@ -62,7 +96,7 @@ var ElevatorAPI = function(options) {
       var now = Math.round(d.getTime() / 1000);
       var hash = sha1(now + this.options.authSecret);
       var self = this;
-		$.ajax({
+		this.addAjax({
          url: this.options.baseURL + "/" + requestURL,
          data: requestBundle,
          type: callType,
