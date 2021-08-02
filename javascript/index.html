@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="">
+<html>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,7 +22,7 @@
 		</div>
 
 		<!-- jQuery -->
-		<script src="//code.jquery.com/jquery.js"></script>
+		<script src="http://code.jquery.com/jquery.js"></script>
 		<!-- Bootstrap JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -34,29 +33,36 @@
 		<script>
 
 		var elevator = new ElevatorAPI({
-			"authUser": 40,
-			"authKey": "WeMtycrjMBqYMW",
-			"authSecret": "TfXkSfrunDs31QGr",
-			"baseURL": "http://dev.elevator.umn.edu/defaultinstance/api/v1"
+			// "authUser": 1,
+			"authKey": "437277957969fa82e0bf78274453b81afcde7658",
+			"authSecret": "622fae9a42a0d5b0afd1b37896b271cff556ad01",
+			"baseURL": "https://radiology.elevator.umn.edu/defaultinstance/api/v1"
 		});
-		// elevator.getCollections(function(response) {
-		// 	console.log(response);
-		// });
-		// elevator.getAssetsFromCollection(collectionId=25, pageNumber=0, function(response) {
-		// 	console.log(response);
-		// });
-		elevator.assetLookup("57a24898ba98a83d0d1b8419", function(response) {
+		elevator.getCollections(function(response) {
 			console.log(response);
 		});
-		elevator.getAssetChildren("57a24898ba98a83d0d1b8419", function(response) {
-
-			elevator.getEmbedContent(response.matches[0].primaryHandlerId, function(embedResponse) {
-				$(".embed").append("<iframe width=640 height=480 src='" + embedResponse + "'></iframe>");
+		elevator.getAssetsFromCollection(collectionId=288, pageNumber=0, function(response) {
+			response.searchResults.forEach(result => {
+						elevator.assetLookup(result, function(response) {
+			console.log(response);
+		});
 			});
 		});
-		// elevator.fileLookup("57a24898ba98a83d0d1b8418", function(response) {
-		// 	console.log(response);
+		// elevator.getAssetsFromCollection("20", 0,function(response) {
+			// console.log(response);
 		// });
+		// elevator.getAssetChildren("57a24898ba98a83d0d1b8419", function(response) {
+
+		// 	elevator.getEmbedContent(response.matches[0].primaryHandlerId, function(embedResponse) {
+		// 		$(".embed").append("<iframe width=640 height=480 src='" + embedResponse + "'></iframe>");
+		// 	});
+		// });
+		elevator.assetLookup("5dd597893f3cb1489369cf02", function(response) {
+			console.log(response);
+		});
+		elevator.fileLookup("5dd597883f3cb1489369cf01", function (response) {
+				console.log(response);
+			});
 		// elevator.search("van gough",0, function(response) {
 		// 	console.log(response);
 		// });

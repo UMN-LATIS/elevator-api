@@ -184,13 +184,28 @@ class elevatorAPI
 
     }
 
+    function importAsset($assetBlock, $collectionId, $templateId) {
+
+        $post = [];
+        $post['collectionId'] = $collectionId;
+        $post['templateId'] = $templateId;
+        $post['assets'] = json_encode($assetBlock);
+
+        $request = "import/importAssets/";
+        $result = $this->execute($request, $post);
+        if ($result) {
+            $assetList = json_decode($result, true);
+            return $assetList;
+        }
+    }
+
 
     private function execute($targetURL=null, $postArray=null, $userId=null) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->baseURL . $targetURL);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         if (!$userId) {
             $userId = $this->userId;
         }
