@@ -205,6 +205,7 @@ class elevatorAPI
         curl_setopt($ch, CURLOPT_URL, $this->baseURL . $targetURL);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_USERAGENT, "ElevatorAPI-PHP/1.0");
         // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         if (!$userId) {
             $userId = $this->userId;
